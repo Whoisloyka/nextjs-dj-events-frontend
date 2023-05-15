@@ -1,19 +1,22 @@
-import { useRouter } from "next/router"
 import Layout from "@/components/Layout"
-
-export default function EventPage() {
-  const router = useRouter()
-
-  console.log(router)
+import { API_URL } from "@/config/index"
+export default function EventPage({ evt }) {
   return (
     <Layout>
       <h1>My Event</h1>
-      <h3>{router.query.slug}</h3>
-      <h3>{router.pathname}</h3>
-      <h3>{router.asPath}</h3>
+      <h3>{evt.name}</h3>
 
       {/* useRouter yönlendirme */}
       <button onClick={() => router.push("/")}>click</button>
     </Layout>
   )
+}
+
+export async function getServerSideProps({ query: { slug } }) {
+  const res = await fetch(`${API_URL}/api/events/${slug}`)
+  const events = await res.json()
+
+  return {
+    props: {},
+  }
 }
